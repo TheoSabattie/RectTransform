@@ -6,6 +6,8 @@ package com;
  */
 class RectSize implements IRectSize
 {
+    public var onUpdatedListeners(default, null):Array<RectSize->Void> = [];
+    
     private var _width:Float;
     private var _height:Float;
     
@@ -18,6 +20,20 @@ class RectSize implements IRectSize
         _height = height;
     }
     
+    public function SetWidthHeight(width:Float, height:Float):RectSize {
+        _width = width;
+        _height = height;
+        emitUpdated();
+        
+        return this;
+    }
+    
+    private function emitUpdated():Void {
+        for (i in 0...onUpdatedListeners.length) {
+            onUpdatedListeners[i](this);
+        }
+    }
+    
     private function get_width():Float 
     {
         return _width;
@@ -25,7 +41,10 @@ class RectSize implements IRectSize
     
     private function set_width(width:Float):Float 
     {
-        return _width = width;
+        _width = width;
+        emitUpdated();
+        
+        return _width;
     }
     
     
@@ -36,7 +55,10 @@ class RectSize implements IRectSize
     
     private function set_height(height:Float):Float 
     {
-        return _height = height;
+        _height = height;
+        emitUpdated();
+        
+        return _height;
     }
     
 }
