@@ -6,8 +6,9 @@ package com;
  */
 class RectTransform
 {
-    public static var windowWidth(default, set):Float;
-    public static var windowHeight(default, set):Float;
+    public static var windowWidth(default, set):Float  = 0;
+    public static var windowHeight(default, set):Float = 0;
+    private static var roots:Array<RectTransform> = [];
     
     private var _parent:RectTransform;
     private var _children:Array<RectTransform>;
@@ -26,12 +27,25 @@ class RectTransform
     
     public function new()
     {
-        
+        parent = null;
     }
     
     private function get_parent():RectTransform 
     {
         return _parent;
+    }
+    
+    public function getRect():Rect {
+        var width:Float            = this.height;
+        var height:Float           = this.height;
+        var anchorPosition:Vector2 = getAnchorCenter().add(anchoredPosition);
+        var rect:Rect              = new Rect();
+        
+        rect.xMin = anchorPosition.x - width * pivot.x;
+        rect.yMin = anchorPosition.y - height * pivot.y;
+        rect.max.setXY(rect.xMin + width, rect.yMin + height);
+        
+        return rect;
     }
     
     public function getAnchorCenter():Vector2 {
@@ -66,6 +80,12 @@ class RectTransform
     
     private function set_parent(parent:RectTransform):RectTransform 
     {
+        if (_parent == null) {
+            if (roots.indexOf(this) == -1) roots.push(this);
+        } else {
+            roots.remove(this);
+        }
+        
         return _parent = parent;
     }
     
