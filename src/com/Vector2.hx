@@ -8,27 +8,71 @@ import haxe.ds.Vector;
  */
 class Vector2
 {
+    private var _x:Float;
+    private var _y:Float;
+    
     public var onUpdatedListeners(default, null):Array<Vector2->Void> = [];
-    public var x:Float;
-    public var y:Float;
+    public var x(get, set):Float;
+    public var y(get, set):Float;
     public var magnitude(get, set):Float;
     
     public function new(x:Float = 0, y:Float = 0) 
     {
-        this.x = x;
-        this.y = y;
+        _x = x;
+        _y = y;
     }
     
     public function setXY(x:Float, y:Float):Vector2 {
-        this.x = x;
-        this.y = y;
+        _x = x;
+        _y = y;
+        
+        emitUpdated();
+        
         return this;
     }
     
-    public function emitUpdated():Void {
+    private function emitUpdated():Void {
         for (i in 0...onUpdatedListeners.length) {
             onUpdatedListeners[i](this);
         }
+    }
+    
+    public function add(additiveVector:Vector2):Vector2 {
+        _x += additiveVector.x;
+        _y += additiveVector.y;
+        
+        emitUpdated();
+        
+        return this;
+    }
+    
+    public function subtract(subtractiveVector:Vector2):Vector2 {
+        _x -= subtractiveVector.x;
+        _y -= subtractiveVector.y;
+        
+        emitUpdated();
+        
+        return this;
+    }
+    
+    public function normalize(magnitude:Float = 1):Vector2 {
+        this.magnitude = magnitude;
+        
+        return this;
+    }
+    
+    public function divide(diviser:Float):Vector2
+    {
+        _x /= diviser;
+        _y /= diviser;
+        
+        emitUpdated();
+        
+        return this;
+    }
+    
+    public function clone():Vector2 {
+        return new Vector2(_x, _y);
     }
     
     private function get_magnitude():Float { return Math.sqrt(x * x + y * y);}
@@ -36,38 +80,34 @@ class Vector2
     private function set_magnitude(magnitude:Float):Float {
         var multiplicator:Float = magnitude / get_magnitude();
         
-        x *= multiplicator;
-        y *= multiplicator;
+        _x *= multiplicator;
+        _y *= multiplicator;
+        
+        emitUpdated();
         
         return magnitude;
     }
     
-    public function add(additiveVector:Vector2):Vector2 {
-        x += additiveVector.x;
-        y += additiveVector.y;
-        return this;
+    private function get_x():Float {
+        return _x;
     }
     
-    public function subtract(subtractiveVector:Vector2):Vector2 {
-        x -= subtractiveVector.x;
-        y -= subtractiveVector.y;
-        return this;
+    private function set_x(x:Float):Float {
+        _x = x;
+        emitUpdated();
+        
+        return _x;
     }
     
-    public function normalize(magnitude:Float = 1):Vector2 {
-        this.magnitude = magnitude;
-        return this;
+    private function get_y():Float {
+       return _y; 
     }
     
-    public function divide(diviser:Float):Vector2
-    {
-        x /= diviser;
-        y /= diviser;
-        return this;
-    }
-    
-    public function clone():Vector2 {
-        return new Vector2(x, y);
+    private function set_y(y:Float):Float {
+        _y = y;
+        emitUpdated();
+        
+        return _y;
     }
     
     public static function cloneAndNormalize(vector:Vector2):Vector2 {
@@ -76,10 +116,10 @@ class Vector2
     
     public static function addition(vector:Vector2, additiveVector:Vector2):Vector2 
     {
-        return new Vector2(vector.x + additiveVector.x, vector.y + additiveVector.y);
+        return new Vector2(vector._x + additiveVector._x, vector._y + additiveVector._y);
     }
     
     public static function subtraction(vector:Vector2, subtractiveVector:Vector2):Vector2 {
-        return new Vector2(vector.x - subtractiveVector.x, vector.y - subtractiveVector.y);
+        return new Vector2(vector._x - subtractiveVector._x, vector._y - subtractiveVector._y);
     }
 }
