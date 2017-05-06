@@ -37,7 +37,7 @@ class RectTransform
     }
     
     public function getRect():Rect {
-        var width:Float            = this.height;
+        var width:Float            = this.width;
         var height:Float           = this.height;
         var anchorPosition:Vector2 = getAnchorCenter().add(anchoredPosition);
         var rect:Rect              = new Rect();
