@@ -12,8 +12,7 @@ class Vector2
     
     public function new(x:Float = 0, y:Float = 0) 
     {
-        this.x = x;
-        this.y = y;
+        setXY(x, y);
     }
     
     public function setXY(x:Float, y:Float):Vector2 {

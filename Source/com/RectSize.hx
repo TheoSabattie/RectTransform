@@ -14,13 +14,12 @@ class RectSize implements IRectSize
     
     public function new(width:Float = 0, height:Float = 0) 
     {
-        this.width  = width;
-        this.height = height;
+        setWidthHeight(width, height);
     }
     
     public function setWidthHeight(width:Float, height:Float):RectSize {
-        this.width  = width;
-        this.height = height;
+        _width  = width;
+        _height = height;
         
         return this;
     }

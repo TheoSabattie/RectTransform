@@ -6,6 +6,7 @@ package com;
 
 enum ResizeMode 
 {
-    SHOW_ALL;
-    NO_MARGIN;
+    FROM_MIN;
+    FROM_MAX;
+    NO_RESIZE;
 }

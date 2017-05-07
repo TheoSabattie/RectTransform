@@ -19,9 +19,7 @@ class Main extends Sprite {
     
     private function gameLoop(e:Event):Void 
     {
-        RectTransform.windowHeight = stage.stageHeight;
-        RectTransform.windowWidth  = stage.stageWidth;
-        
+        RectTransform.windowSize.setWidthHeight(stage.stageWidth, stage.stageHeight);
         rect.doAction();
     }
 }
