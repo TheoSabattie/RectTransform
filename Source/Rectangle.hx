@@ -34,10 +34,10 @@ class Rectangle extends Sprite
         
         
         rectTransform.sizeDelta.setWidthHeight(50, 50);
-        rectTransform.anchorMin.setXY(1, 0);
-        rectTransform.anchorMax.setXY(1, 0);
+        rectTransform.anchorMin.setXY(1, 1);
+        rectTransform.anchorMax.setXY(1, 1);
         rectTransform.anchoredPosition.setXY(0, 0);
-        rectTransform.pivot.setXY(1, 0);
+        rectTransform.pivot.setXY(1, 1);
     }
     
     public function doAction() {
