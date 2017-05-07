@@ -58,6 +58,13 @@ class Vector2
         return this;
     }
     
+    public function multiVec(multiVec:Vector2):Vector2 {
+        x *= multiVec.x;
+        y *= multiVec.y;
+        
+        return this;
+    }
+    
     public function clone():Vector2 {
         return new Vector2(x, y);
     }
