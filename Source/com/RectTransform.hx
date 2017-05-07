@@ -1,4 +1,5 @@
 package com;
+import js.html.ParagraphElement;
 
 /**
  * ...
@@ -6,8 +7,9 @@ package com;
  */
 class RectTransform
 {
-    public static var windowWidth:Float;
-    public static var windowHeight:Float;
+    public static var resizeMode:ResizeMode = ResizeMode.NO_MARGIN;
+    public static var windowReferenceSize(default, null):IRectSize = new RectSize(2048, 1366);
+    public static var windowSize(default, null):IRectSize = new RectSize();
     private static var roots:Array<RectTransform> = [];
     
     private var _parent:RectTransform;
@@ -18,9 +20,11 @@ class RectTransform
     public var anchoredPosition(default, null):Vector2 = new Vector2(0, 0);
     public var sizeDelta(default, null):RectSize       = new RectSize(0, 0);
     public var pivot(default, null):Vector2            = new Vector2(0.5, 0.5);
+    public var localScale(default, null):Vector2       = new Vector2(1, 1);
     
     public var index(get, set):Int;
     public var parent(get, set):RectTransform;
+    public var invertY:Bool = false;
     
     public function new()
     {
@@ -32,7 +36,28 @@ class RectTransform
         return _parent;
     }
     
-    public var invertY:Bool = false;
+    public static function getWindowScale():Vector2 {
+    //    windowSize.width / windowSize.height
+    //    windowReferenceSize.width
+    //    
+    //    windowReferenceSize.height
+    //    
+    //    if (resizeMode == ResizeMode.NO_MARGIN) {
+    //        
+    //    } else {
+    //        
+    //    }
+    
+        throw "not implemented";
+    }
+    
+    private function getParentScale():Vector2 {
+        return _parent == null? getWindowScale() : _parent.getScale();
+    }
+    
+    public function getScale():Vector2 {
+        return localScale.clone().multiVec(getParentScale());
+    }
     
     public function getRect():Rect {
         var width:Float            = getWidth();
@@ -45,8 +70,8 @@ class RectTransform
         rect.max.setXY(rect.xMin + width, rect.yMin + height);
         
         trace( {
-            windowWidth  : RectTransform.windowWidth,
-            windowHeight : RectTransform.windowHeight,
+            windowWidth  : windowSize.width,
+            windowHeight : windowSize.height,
             rect         : rect,
             anchorCenter : getAnchorCenter()
         });
@@ -55,11 +80,11 @@ class RectTransform
     }
     
     public function getParentWidth():Float {
-        return _parent == null ? windowWidth : _parent.getWidth();
+        return _parent == null ? windowSize.width : _parent.getWidth();
     }
     
     public function getParentHeight():Float {
-        return _parent == null ? windowHeight : _parent.getHeight();
+        return _parent == null ? windowSize.height : _parent.getHeight();
     }
     
     public function getAnchorCenter():Vector2 {
