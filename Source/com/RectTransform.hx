@@ -41,7 +41,7 @@ class RectTransform
         var rect:Rect              = new Rect();
         
         rect.xMin = anchorPosition.x - width * pivot.x;
-        rect.yMin = (invertY) ? anchorPosition.y + height * (1-pivot.y) : anchorPosition.y - height * pivot.y;
+        rect.yMin = (invertY) ? anchorPosition.y - height * (1-pivot.y) : anchorPosition.y - height * pivot.y;
         rect.max.setXY(rect.xMin + width, rect.yMin + height);
         
         trace( {
@@ -66,7 +66,7 @@ class RectTransform
         var parentWidth:Float  = getParentWidth();
         var parentHeight:Float = getParentHeight();
         
-        return new Vector2(anchorMin.x * parentWidth + getAnchorWidth() / 2, anchorMin.y * parentHeight + getAnchorHeight() / 2);
+        return new Vector2(anchorMin.x * parentWidth + getAnchorWidth() / 2, (invertY ? 1 - anchorMin.y : anchorMin.y) * parentHeight + getAnchorHeight() / 2);
     }
     
     public function getChildren():Array<RectTransform> {
