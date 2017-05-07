@@ -1,9 +1,11 @@
 package;
 import com.RectTransform;
+import openfl.Assets;
 import openfl.Lib;
 import openfl.display.Sprite;
 import openfl.display.StageDisplayState;
 import openfl.events.Event;
+import yaml.Yaml;
 
 class Main extends Sprite {
     var rect:Rectangle = new Rectangle();

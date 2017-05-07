@@ -21,10 +21,6 @@ class RectTransform
     
     public var index(get, set):Int;
     public var parent(get, set):RectTransform;
-    public var width(get, never):Float;
-    public var height(get, never):Float;
-    public var anchorWidth(get, never):Float;
-    public var anchorHeight(get, never):Float;
     
     public function new()
     {
@@ -36,51 +32,63 @@ class RectTransform
         return _parent;
     }
     
+    public var invertY:Bool = false;
+    
     public function getRect():Rect {
-        var width:Float            = this.width;
-        var height:Float           = this.height;
+        var width:Float            = getWidth();
+        var height:Float           = getHeight();
         var anchorPosition:Vector2 = getAnchorCenter().add(anchoredPosition);
         var rect:Rect              = new Rect();
         
         rect.xMin = anchorPosition.x - width * pivot.x;
-        rect.yMin = anchorPosition.y - height * pivot.y;
+        rect.yMin = (invertY) ? anchorPosition.y + height * (1-pivot.y) : anchorPosition.y - height * pivot.y;
         rect.max.setXY(rect.xMin + width, rect.yMin + height);
+        
+        trace( {
+            windowWidth  : RectTransform.windowWidth,
+            windowHeight : RectTransform.windowHeight,
+            rect         : rect,
+            anchorCenter : getAnchorCenter()
+        });
         
         return rect;
     }
     
+    public function getParentWidth():Float {
+        return _parent == null ? windowWidth : _parent.getWidth();
+    }
+    
+    public function getParentHeight():Float {
+        return _parent == null ? windowHeight : _parent.getHeight();
+    }
+    
     public function getAnchorCenter():Vector2 {
-        return new Vector2(anchorMin.x + anchorWidth / 2, anchorMin.y + anchorHeight / 2);
+        var parentWidth:Float  = getParentWidth();
+        var parentHeight:Float = getParentHeight();
+        
+        return new Vector2(anchorMin.x * parentWidth + getAnchorWidth() / 2, anchorMin.y * parentHeight + getAnchorHeight() / 2);
     }
     
     public function getChildren():Array<RectTransform> {
         return _children.slice(0);
     }
     
-    private function get_anchorWidth():Float {
-        if (_parent == null) {
-            return windowWidth * (anchorMax.x - anchorMin.x);
-        }
-        
-        return _parent.width * (anchorMax.x - anchorMin.x);
+    private function getAnchorWidth():Float {
+        return getParentWidth() * (anchorMax.x - anchorMin.x);
     }
     
-    private function get_anchorHeight():Float {
-        if (_parent == null) {
-            return windowHeight * (anchorMax.y - anchorMin.y);
-        }
-        
-        return _parent.height * (anchorMax.y - anchorMin.y);
+    private function getAnchorHeight():Float {
+        return getParentHeight() * (anchorMax.y - anchorMin.y);
     }
     
-    private function get_width():Float 
+    private function getWidth():Float 
     {
-        return anchorWidth + sizeDelta.width;
+        return getAnchorWidth() + sizeDelta.width;
     }
     
-    private function get_height():Float 
+    private function getHeight():Float 
     {
-        return anchorHeight + sizeDelta.height;
+        return getAnchorHeight() + sizeDelta.height;
     }
     
     private function set_parent(parent:RectTransform):RectTransform 

@@ -18,7 +18,7 @@ class RectSize implements IRectSize
         this.height = height;
     }
     
-    public function SetWidthHeight(width:Float, height:Float):RectSize {
+    public function setWidthHeight(width:Float, height:Float):RectSize {
         this.width  = width;
         this.height = height;
         
