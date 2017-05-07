@@ -51,6 +51,13 @@ class Vector2
         return this;
     }
     
+    public function multiply(multiplier:Float):Vector2 {
+        x *= multiplier;
+        y *= multiplier;
+        
+        return this;
+    }
+    
     public function clone():Vector2 {
         return new Vector2(x, y);
     }
