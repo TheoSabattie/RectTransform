@@ -13,39 +13,23 @@ import yaml.Yaml;
  */
 class Rectangle extends Sprite
 {
-    private var rectTransform:RectTransform = new RectTransform();
+    public var rectTransform(default, null):RectTransform = new RectTransform();
+    public var color:Int = 0xFF00F0;
     
     public function new() 
     {
         super();
-        
-        var yaml:String = Assets.getText("assets/Panel.prefab");
-        trace(yaml.substring(yaml.indexOf("RectTransform")));
-        var rectDatas:Dynamic = Yaml.parse(yaml.substring(yaml.indexOf("RectTransform")), Parser.options().useObjects());
-        rectDatas = rectDatas.RectTransform;
-        
-        //rectTransform.invertY = true;
-        
-        //rectTransform.sizeDelta.setWidthHeight(rectDatas.m_SizeDelta.x, rectDatas.m_SizeDelta.y);
-        //rectTransform.anchorMin.setXY(rectDatas.m_AnchorMin.x, rectDatas.m_AnchorMin.y);
-        //rectTransform.anchorMax.setXY(rectDatas.m_AnchorMax.x, rectDatas.m_AnchorMax.y);
-        //rectTransform.anchoredPosition.setXY(rectDatas.m_AnchoredPosition.x, rectDatas.m_AnchoredPosition.y);
-        //rectTransform.pivot.setXY(rectDatas.m_Pivot.x, rectDatas.m_Pivot.y);
-        
-        
-        rectTransform.sizeDelta.setWidthHeight(50, 50);
-        rectTransform.anchorMin.setXY(1, 1);
-        rectTransform.anchorMax.setXY(1, 1);
-        rectTransform.anchoredPosition.setXY(0, 0);
-        rectTransform.pivot.setXY(1, 1);
+        rectTransform.onUpdatedListeners.push(onRectTransformUpdated);
     }
     
-    public function doAction() {
+    public function onRectTransformUpdated(rectTransform:RectTransform):Void {
         graphics.clear();
-        graphics.beginFill(0xFF00F0);
+        graphics.beginFill(color);
         
         var rect:Rect = rectTransform.getRect();
-        graphics.drawRect(rect.xMin, rect.yMin, rect.width, rect.height);
+        graphics.drawRect(0, 0, rect.width, rect.height);
         graphics.endFill();
+        x = rect.xMin;
+        y = rect.yMin;
     }
 }
