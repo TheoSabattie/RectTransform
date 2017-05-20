@@ -181,14 +181,15 @@ class RectTransform
      * @return
      */
     public function getRect():Rect {
-        var size:RectSize          = getSize();
-        var rect:Rect              = new Rect();
-        var scale:Vector2          = getScale();
-        var anchorPosition:Vector2 = getAnchorCenter().add(_anchoredPosition.multiVec(scale));
+        var rect:Rect        = getAnchorRect();
+        var scale:Vector2    = getScale();
+        var position:Vector2 = _anchoredPosition.clone().multiVec(scale);
         
-        rect.xMin = anchorPosition.x - size.width * _pivot.x;
-        rect.yMin = (invertY) ? anchorPosition.y - size.height * (1-_pivot.y) : anchorPosition.y - size.height * _pivot.y;
-        rect.max.setXY(rect.xMin + size.width, rect.yMin + size.height);
+        rect.max.add(position);
+        rect.min.add(position);
+        
+        rect.width  += _sizeDelta.width * scale.x;
+        rect.height += _sizeDelta.height * scale.y;
         
         return rect;
     }
